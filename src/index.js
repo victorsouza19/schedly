@@ -1,6 +1,7 @@
 const express = require('express'),
 app = express(),
-mongoose = require('mongoose');
+mongoose = require('mongoose'),
+AppointmentService = require("./services/AppointmentService");
 
 // static files
 app.use(express.static("public"));
@@ -17,11 +18,22 @@ mongoose.connect("mongodb://localhost:27017/schedly");
 
 // routes 
 app.get("/", (req, res) => {
-  res.json({msg: 'Hello'});
+  res.render("index");
 });
 
 app.get("/register", (req, res) => {
   res.render("create");
+});
+
+app.post("/register", async (req, res) => {
+
+  let status = await AppointmentService.Create(req.body);
+
+  if(status){
+    res.redirect("/");
+  }else{
+    res.json({err: "Error during the appointment create."});
+  }
 });
 
 
