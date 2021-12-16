@@ -1,5 +1,6 @@
 const schema = require("../models/appointment"), 
-mongoose = require('mongoose');
+mongoose = require('mongoose'),
+AppointmentFactory = require("../factories/AppointmentFactory");
 
 const appointment = mongoose.model("Appointment", schema);
 
@@ -54,6 +55,30 @@ class AppointmentService{
     } 
   }
 
+  async GetAll(showFinished){
+    try {
+      if(showFinished){
+        return await appointment.find();
+
+      }else{
+        let result = await appointment.find({'finished': false});
+        let appointments = [];
+
+        result.forEach(appointment => {
+          if(appointment.date != undefined){
+            appointments.push( AppointmentFactory.Build(appointment) );
+          }
+        });
+
+        return appointments;
+  
+      }
+    } catch (error) {
+      console.log(error);
+      return {err: "Error during the database communication"};
+    }
+    
+  }
 
 };
 

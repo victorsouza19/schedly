@@ -21,6 +21,18 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+app.get("/calendar", async (req, res) => {
+
+  let result = await AppointmentService.GetAll(false);
+
+  if(result.err){
+    res.json(result);
+  }else{
+    res.json(result);
+  }
+  
+});
+
 app.get("/register", (req, res) => {
   res.render("create");
 });
