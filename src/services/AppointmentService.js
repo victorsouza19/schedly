@@ -80,6 +80,29 @@ class AppointmentService{
     
   }
 
+  async GetById(id){
+    if(id != undefined){
+      try {
+          let result = await appointment.findOne({'_id': id});
+
+          if(result != null){
+            return {status: true, result};
+          }else{
+            return {status: false};
+          }
+
+      } catch (err) {
+        console.log(err);
+        return {status: false};
+
+      }
+    }
+  }
+
+  async Finish(id){
+    
+  }
+
 };
 
 module.exports = new AppointmentService();

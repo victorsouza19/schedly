@@ -21,7 +21,24 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/calendar", async (req, res) => {
+app.get("/calendar", (req, res) => {
+  res.render("calendar");
+});
+
+app.get("/event/:id", async (req, res) => {
+  let id = req.params.id;
+
+  let event = await AppointmentService.GetById(id);
+
+  if(event.status){
+    res.render("event", {event: event.result});
+  }else{
+    res.redirect("/");
+  }
+
+});
+
+app.get("/appointments", async (req, res) => {
 
   let result = await AppointmentService.GetAll(false);
 
