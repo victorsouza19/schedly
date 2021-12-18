@@ -58,7 +58,16 @@ class AppointmentService{
   async GetAll(showFinished){
     try {
       if(showFinished){
-        return await appointment.find();
+        let result = await appointment.find();
+        let appointments = [];
+
+        result.forEach(appointment => {
+          if(appointment.date != undefined){
+            appointments.push( AppointmentFactory.BuildDate(appointment) );
+          }
+        });
+
+        return appointments;
 
       }else{
         let result = await appointment.find({'finished': false});
@@ -107,6 +116,38 @@ class AppointmentService{
       console.log(err);
       return false;
     } 
+  }
+
+  async Search(params){
+    let query = [];
+
+    if(params.cpf){
+      query.push({cpf: params.search});
+    }
+    if(params.email){
+      query.push({email: params.search});
+    }
+    if(params.name){
+      query.push({name: params.search});
+    }
+
+    try {
+      let result = await appointment.find().or(query);
+      let appointments = [];
+
+      result.forEach(appointment => {
+        if(appointment.date != undefined){
+          appointments.push( AppointmentFactory.BuildDate(appointment) );
+        }
+      });
+
+      return appointments;
+
+    } catch (error) {
+      console.log(error);
+      return []; 
+
+    }
   }
 };
 

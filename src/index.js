@@ -3,14 +3,10 @@ app = express(),
 mongoose = require('mongoose'),
 AppointmentService = require("./services/AppointmentService");
 
-// static files
 app.use(express.static("public"));
-
-// parser config
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-// view engine
 app.set('view engine', 'ejs');
 
 // database
@@ -25,6 +21,22 @@ app.get("/calendar", (req, res) => {
   res.render("calendar");
 });
 
+app.get("/list", async (req, res) => {
+
+  let appointments = await AppointmentService.GetAll(true);
+  res.render("list", {appointments});
+
+});
+
+app.get("/search", async (req, res) => {
+  if(req.query.search == ''){
+    res.redirect("/list");
+  }
+
+  let appointments = await AppointmentService.Search(req.query);
+  res.render("list", {appointments});
+});
+
 app.get("/event/:id", async (req, res) => {
   let id = req.params.id;
 
@@ -36,18 +48,6 @@ app.get("/event/:id", async (req, res) => {
     res.redirect("/");
   }
 
-});
-
-app.post("/finish", async (req,res) => {
-  const id = req.body.id;
-
-  let result = await AppointmentService.Finish(id);
-  if(result){
-    res.redirect("/");
-  }else{
-    res.json({err: "Error during the appointment update."});
-  }
-  
 });
 
 app.get("/appointments", async (req, res) => {
@@ -75,6 +75,18 @@ app.post("/register", async (req, res) => {
   }else{
     res.json({err: "Error during the appointment create."});
   }
+});
+
+app.post("/finish", async (req,res) => {
+  const id = req.body.id;
+
+  let result = await AppointmentService.Finish(id);
+  if(result){
+    res.redirect("/");
+  }else{
+    res.json({err: "Error during the appointment update."});
+  }
+  
 });
 
 

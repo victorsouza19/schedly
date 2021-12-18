@@ -1,0 +1,54 @@
+<%- include('./partials/header'); %>
+<body>
+  <div class="container p-2">
+    <form action="/search" method="GET">
+      <div class="d-flex mb-2 mt-3">
+        <input class="form-control" type="search" name="search" id="search">
+        <button class="btn btn-primary">Find</button>
+        <a href="/list" class="btn btn-outline-primary">Clear</a>
+      </div>
+
+      <span class="fw-bold">Filters:</span>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" name="cpf" type="checkbox" id="cpf"  checked>
+        <label class="form-check-label" for="cpf">CPF</label>
+      </div>
+      <div class="form-check form-check-inline mb-3">
+        <input class="form-check-input" name="email" type="checkbox" id="email" checked>
+        <label class="form-check-label" for="email">E-mail</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" name="name" type="checkbox" id="name">
+        <label class="form-check-label" for="cpf">Name</label>
+      </div>
+    </form>
+
+    <table class="table">
+      <thead class="text-light bg-dark">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Appointment</th>
+          <th scope="col">Name</th>
+          <th scope="col">E-mail</th>
+          <th scope="col">CPF</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <% appointments.forEach(appointment => { %>
+        <tr>
+          <th scope="row">
+            <%= appointment.date %>
+          </th>
+          <td><%= appointment.description %></td>
+          <td><%= appointment.name %></td>
+          <td><%= appointment.email %></td>
+          <td><%= appointment.cpf %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+<%- include('./partials/footer'); %>
