@@ -100,9 +100,14 @@ class AppointmentService{
   }
 
   async Finish(id){
-    
+    try {
+      await appointment.findByIdAndUpdate(id, {finished:  true});
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    } 
   }
-
 };
 
 module.exports = new AppointmentService();

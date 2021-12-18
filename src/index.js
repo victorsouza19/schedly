@@ -38,6 +38,18 @@ app.get("/event/:id", async (req, res) => {
 
 });
 
+app.post("/finish", async (req,res) => {
+  const id = req.body.id;
+
+  let result = await AppointmentService.Finish(id);
+  if(result){
+    res.redirect("/");
+  }else{
+    res.json({err: "Error during the appointment update."});
+  }
+  
+});
+
 app.get("/appointments", async (req, res) => {
 
   let result = await AppointmentService.GetAll(false);
