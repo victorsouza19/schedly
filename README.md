@@ -26,8 +26,6 @@
 ## ✨ Latest Updates:
 
 - [x] add SASS to the project.
-- [ ] 
-- [ ] 
 
 
 ## 💻 Prerequisites
