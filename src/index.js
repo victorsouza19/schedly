@@ -89,5 +89,11 @@ app.post("/finish", async (req,res) => {
   
 });
 
+let poolTime = 1000 * 60 * 15;
+
+setInterval(async () => {
+  await AppointmentService.SendNotification();
+
+}, poolTime);
 
 module.exports = app;

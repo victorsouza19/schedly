@@ -15,8 +15,10 @@ class AppointmentFactory{
     let finalAppointment = {
       id: appointment._id,
       title: `${appointment.name}: ${appointment.description}`,
+      email: appointment.email,
       start: startDate,
-      end: startDate
+      end: startDate,
+      notified: appointment.notified
     } 
 
     return finalAppointment;

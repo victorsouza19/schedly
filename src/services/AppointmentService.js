@@ -1,6 +1,9 @@
 const schema = require("../models/appointment"), 
 mongoose = require('mongoose'),
+mailer = require('nodemailer'),
 AppointmentFactory = require("../factories/AppointmentFactory");
+
+require('dotenv').config();
 
 const appointment = mongoose.model("Appointment", schema);
 
@@ -43,7 +46,8 @@ class AppointmentService{
       cpf, 
       date, 
       time,
-      finished: false
+      finished: false,
+      notified: false
     });
 
     try {
@@ -148,6 +152,50 @@ class AppointmentService{
       return []; 
 
     }
+  }
+
+  async SendNotification(){
+    let appointments = await this.GetAll(false);
+
+    let transporter = mailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
+    });
+    
+    appointments.forEach(async item => {
+      let date = item.start.getTime();
+      let hour = 1000 * 60 * 60;
+      let gap = date - Date.now();
+
+      if(gap <= hour){
+        if(!item.notified){
+
+          await appointment.findByIdAndUpdate(item.id, {notified: true});
+
+          transporter.sendMail({
+            from: "Schedly <remember@schedly.com>",
+            to: item.email,
+            subject: `Reminder | ${item.title}`,
+            text: `Hello, don't forget your event today: ${item.start}`,
+            html: `
+            <h2>Hello!</h2>
+            <h4>Don't forget your event today:</h4>
+            <p><strong>${item.title}</strong> | ${item.start}</p>
+            <small>If you are unable to attend, please contact us soon as possible. (:</small>
+            `
+          }).then(res => {
+            console.log(res);
+          }).catch(err => {
+            console.log(err);
+
+          });
+        }
+      }
+    });
   }
 };
 
