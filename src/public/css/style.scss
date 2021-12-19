@@ -1,0 +1,34 @@
+@import '_variables';
+@import '_mixins';
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  @include flexCenter(center, column);
+
+  width: 100%;
+  height: 100vh;
+}
+
+.container{
+
+  a, button{
+    margin: .2rem;
+    padding: .8rem;
+    transition: .5s;
+
+    display: inline-block;
+
+    &:hover{
+      margin: 0;
+      font-size: 1.1rem;
+      padding: .9rem;
+
+    }
+
+  }
+}
