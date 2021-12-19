@@ -14,6 +14,7 @@ mongoose.connect("mongodb://localhost:27017/schedly");
 
 // routes 
 app.get("/", (req, res) => {
+  res.sendStatus(200);
   res.render("index");
 });
 
